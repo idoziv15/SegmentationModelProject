@@ -85,12 +85,7 @@ You should see at http://127.0.0.1:8000/docs a FastAPI swagger interface, to mak
 
 Usage:
 ```
-python phase_3/api.py --model_name <model_name> --image_path <path_to_image> --use_onnx
-
-Or 
-
-cd phase_3
-python api.py --model_name <model_name> --image_path <path_to_image> --use_onnx
+uvicorn phase_3/apy:app --reload
 ```
 
 model_name (Optional): The name of the model to use (default: "deeplabv3_mobilenet_v3").
