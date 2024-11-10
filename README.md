@@ -26,6 +26,9 @@ This project provides tools for converting a PyTorch model to ONNX format, runni
 
 ## Setup Instructions
 
+**NOTE: This project works properly with python version 3.10**
+**(One of the packages I have used compatable only on python 3.10, due to time constraints I decided to keep it in that version. I assume there is a another package I could have used with newer python version)**
+
 1. **Clone the repository**:
 
 ```bash
