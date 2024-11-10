@@ -126,7 +126,6 @@ def visualize_differences(output_pytorch: np.ndarray, output_onnx: np.ndarray) -
         output_pytorch (np.ndarray): PyTorch model output.
         output_onnx (np.ndarray): ONNX model output.
     """
-    res = np.bitwise_xor(output_pytorch[0].argmax(axis=0), output_onnx[0].argmax(axis=0))
     diff = np.abs(output_pytorch - output_onnx)
     plt.figure(figsize=(12, 6))
 
@@ -144,7 +143,7 @@ def visualize_differences(output_pytorch: np.ndarray, output_onnx: np.ndarray) -
     plt.subplot(1, 3, 3)
     plt.title("Difference (Heatmap)")
     # plt.imshow(diff[0].sum(axis=0), cmap="hot")
-    plt.imshow(res)
+    plt.imshow(diff)
 
     plt.show()
 
@@ -175,7 +174,6 @@ def visualize_blended(output1, output2):
     plt.imshow(blended)
     plt.title("Blended Visualization")
     plt.show()
-
 
 # Main Program Execution
 def main():
@@ -229,7 +227,6 @@ def main():
     logging.info(f"L2 Difference between PyTorch and ONNX outputs: {l2_difference:.4f}")
 
     # Visualize the differences
-    visualize_blended(output_pytorch, output_onnx)
     visualize_differences(output_pytorch, output_onnx)
 
 if __name__ == "__main__":
