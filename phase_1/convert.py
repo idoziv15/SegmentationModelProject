@@ -4,12 +4,18 @@ import onnxruntime as ort
 import numpy as np
 import time
 import sys
+import os
 import logging
 import argparse
 from PIL import Image
-from model_utils import load_torch_model
-from model_utils import validate_image_path
 import matplotlib.pyplot as plt
+
+# Add the project root directory to sys.path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+from model_utils import load_torch_model, validate_image_path
 
 # Constants for image preprocessing
 IMAGE_SIZE = (224, 224)                  # Target image size for resizing
@@ -20,8 +26,8 @@ CHANNELS = 3
 WIDTH = 224
 HEIGHT = 224
 DEFAULT_ONNX_PATH = "deeplabv3_mobilenet_v3.onnx"
-DEFAULT_MODEL_NAME = "deeplabv3_mobilenet_v3"
-DEFAULT_IMAGE_PATH = "..images.cat2"
+DEFAULT_MODEL_NAME = "deeplabv3_mobilenet_v3_large"
+DEFAULT_IMAGE_PATH = os.path.join(project_root, "images", "cat2.jpg")
 
 def preprocess_image(image_path: str) -> torch.Tensor:
     """
@@ -126,24 +132,29 @@ def visualize_differences(output_pytorch: np.ndarray, output_onnx: np.ndarray) -
         output_pytorch (np.ndarray): PyTorch model output.
         output_onnx (np.ndarray): ONNX model output.
     """
+    output_pytorch = output_pytorch[0].argmax(axis=0)
+    output_onnx = output_onnx[0].argmax(axis=0) 
+
+    # Calculate absolute difference between predictions
     diff = np.abs(output_pytorch - output_onnx)
+    
     plt.figure(figsize=(12, 6))
 
     # Display the output of the PyTorch model
     plt.subplot(1, 3, 1)
     plt.title("PyTorch Output")
-    plt.imshow(output_pytorch[0].argmax(axis=0))
+    plt.imshow(output_pytorch, cmap="viridis")
 
     # Display the output of the ONNX model
     plt.subplot(1, 3, 2)
     plt.title("ONNX Output")
-    plt.imshow(output_onnx[0].argmax(axis=0))
+    plt.imshow(output_onnx, cmap="viridis")
 
     # Display PyTorch and ONNX outputs, with a heatmap for differences
     plt.subplot(1, 3, 3)
     plt.title("Difference (Heatmap)")
     # plt.imshow(diff[0].sum(axis=0), cmap="hot")
-    plt.imshow(diff)
+    plt.imshow(diff, cmap="hot")
 
     plt.show()
 

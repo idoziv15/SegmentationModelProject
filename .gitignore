@@ -8,7 +8,6 @@ venv/
 
 # Ignore model files and large data folders
 onnx_models/
-images/
 
 # Ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints/

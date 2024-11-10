@@ -1,11 +1,19 @@
 import requests
 import logging
 import argparse
-from ..model_utils import validate_image_path, encode_image, display_segmentation_maps
+import sys
+import os
+
+# Add the project root directory to sys.path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+from model_utils import validate_image_path, encode_image, display_segmentation_maps
 
 # Constants for default values
-DEFAULT_MODEL_NAME = "deeplabv3_mobilenet_v3"
-DEFAULT_IMAGE_PATH = "..images.cat2.jpg"
+DEFAULT_MODEL_NAME = "deeplabv3_mobilenet_v3_large"
+DEFAULT_IMAGE_PATH = os.path.join(project_root, "images", "cat2.jpg")
 DEFAULT_USE_ONNX = False
 API_URL = "http://127.0.0.1:8000/inference"
 IMAGE_FORMAT = "PIL"
