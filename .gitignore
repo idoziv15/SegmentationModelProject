@@ -1,0 +1,51 @@
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environment folder
+venv/
+
+# Ignore model files and large data folders
+onnx_models/
+images/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+
+# Ignore compiled C extensions
+*.so
+
+# Ignore test coverage reports
+htmlcov/
+*.cover
+*.coverage
+*.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.coveragerc
+
+# Ignore mypy type checking cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ignore Pyre type checking cache
+.pyre/
+
+# Ignore pytest cache
+.pytest_cache/
