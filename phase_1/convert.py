@@ -132,58 +132,32 @@ def visualize_differences(output_pytorch: np.ndarray, output_onnx: np.ndarray) -
         output_pytorch (np.ndarray): PyTorch model output.
         output_onnx (np.ndarray): ONNX model output.
     """
-    output_pytorch = output_pytorch[0].argmax(axis=0)
-    output_onnx = output_onnx[0].argmax(axis=0) 
+    output_pytorch = output_pytorch[0]
+    output_onnx = output_onnx[0]
 
-    # Calculate absolute difference between predictions
-    diff = np.abs(output_pytorch - output_onnx)
-    
-    plt.figure(figsize=(12, 6))
+    # Calculate the absolute difference across all class probabilities
+    diff = np.abs(output_pytorch - output_onnx).sum(axis=0)
+    diff_normalized = (diff - diff.min()) / (diff.max() - diff.min() + 1e-8)
 
-    # Display the output of the PyTorch model
+    plt.figure(figsize=(14, 6))
+
+    # Display the class predictions of the PyTorch model
     plt.subplot(1, 3, 1)
-    plt.title("PyTorch Output")
-    plt.imshow(output_pytorch, cmap="viridis")
+    plt.title("PyTorch Output (Class Predictions)")
+    plt.imshow(output_pytorch.argmax(axis=0), cmap="viridis")
 
-    # Display the output of the ONNX model
+    # Display the class predictions of the ONNX model
     plt.subplot(1, 3, 2)
-    plt.title("ONNX Output")
-    plt.imshow(output_onnx, cmap="viridis")
+    plt.title("ONNX Output (Class Predictions)")
+    plt.imshow(output_onnx.argmax(axis=0), cmap="viridis")
 
-    # Display PyTorch and ONNX outputs, with a heatmap for differences
+    # Display the raw difference (heatmap) between PyTorch and ONNX outputs
     plt.subplot(1, 3, 3)
-    plt.title("Difference (Heatmap)")
-    # plt.imshow(diff[0].sum(axis=0), cmap="hot")
-    plt.imshow(diff, cmap="hot")
+    plt.title("Difference in Probabilities (Heatmap)")
+    heatmap = plt.imshow(diff_normalized, cmap="plasma")
+    cbar = plt.colorbar(heatmap, label="Difference Intensity", pad=0.1)
 
-    plt.show()
-
-def visualize_blended(output1, output2):
-    # Ensure the outputs are compatible, squeeze to remove batch dimension if needed
-    output1 = np.squeeze(output1)
-    output2 = np.squeeze(output2)
-
-    # If there are multiple channels, select a first one
-    if output1.ndim == 3:
-        output1 = output1[0]  # Select the first channel
-    if output2.ndim == 3:
-        output2 = output2[0]  # Select the first channel
-
-    # Normalize outputs to range [0, 1] for blending visualization
-    output1 = (output1 - output1.min()) / (output1.max() - output1.min())
-    output2 = (output2 - output2.min()) / (output2.max() - output2.min())
-
-    # Create an RGB image where red corresponds to model 1, green to model 2
-    red = output1
-    green = output2
-    blue = np.zeros_like(output1)  # No blue channel
-
-    # Stack into an RGB image
-    blended = np.stack([red, green, blue], axis=-1)
-
-    # Display the blended image
-    plt.imshow(blended)
-    plt.title("Blended Visualization")
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1, wspace=0.3)
     plt.show()
 
 # Main Program Execution
@@ -227,15 +201,15 @@ def main():
 
     # Run inference on PyTorch model
     output_pytorch, runtime_pytorch = run_pytorch_inference(model, input_tensor, device)
-    logging.info(f"PyTorch runtime: {runtime_pytorch:.4f} seconds")
+    print(f"PyTorch runtime: {runtime_pytorch:.4f} seconds")
 
     # Run inference on ONNX model
     output_onnx, runtime_onnx = run_onnx_inference(onnx_output_path, input_tensor)
-    logging.info(f"ONNX runtime: {runtime_onnx:.4f} seconds")
+    print(f"ONNX runtime: {runtime_onnx:.4f} seconds")
 
     # Calculate and print L2 difference
     l2_difference = compute_l2_difference(output_pytorch, output_onnx)
-    logging.info(f"L2 Difference between PyTorch and ONNX outputs: {l2_difference:.4f}")
+    print(f"L2 Difference between PyTorch and ONNX outputs: {l2_difference:.4f}")
 
     # Visualize the differences
     visualize_differences(output_pytorch, output_onnx)
