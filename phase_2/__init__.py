@@ -1,0 +1,1 @@
+from .segmentation_model.segmentation_ai import SegmentationModelAI
