@@ -6,6 +6,9 @@ This project is designed for model conversion, preprocessing, and segmentation u
 - **Phase 2**: Contains utility functions and classes for segmentation models but does not require standalone execution.
 - **Phase 3**: API-based inference and client interactions.
 
+## **NOTE** This project runs properly on python version 3.10.
+### (I have used this python version since one of the packages I have used is require that python version. I assume i could use a different package but due to time constraints I chose that package.)
+
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Setup Instructions](#setup-instructions)
