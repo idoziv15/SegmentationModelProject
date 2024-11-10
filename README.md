@@ -105,3 +105,6 @@ python phase_3/client.py --model_name <model_name> --image_path <path_to_image> 
 
 Replace <model_name> (Optional) and <path_to_image> (Optional) with appropriate values of your own, if desired.
 
+![Cat Differences Figure](images/cat_difference.png)
+
+![Airplane Differences Figure](images/plane_difference.png)
