@@ -92,11 +92,6 @@ uvicorn api:app --reload
 
 ```
 
-model_name (Optional): The name of the model to use (default: "deeplabv3_mobilenet_v3").
-
-image_path (Optional): Path to the image to process (default: "cat2.jpg").
-use_onnx: Flag to indicate if the ONNX model should be used (default is False).
-
 #### Running client.py:
 The client.py script interacts with the API, sending requests for model inference. Make sure api.py is running on the specified host and port before executing client.py.
 
